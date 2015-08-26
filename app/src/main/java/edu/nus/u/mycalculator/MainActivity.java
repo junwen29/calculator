@@ -17,15 +17,27 @@ public class MainActivity extends AppCompatActivity {
     private TextView calculatorDisplay;
     private float currentNumber;
 
+    private static String CURRENT_OPERATOR_KEY = "CURRENT_OPERATOR";
+    private static String CURRENT_NUMBER_KEY = "CURRENT_NUMBER_KEY";
+    private static String CALCULATOR_DISPLAY_KEY = "CALCULATOR_DISPLAY_KEY";
+
     @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         result = 0;
         currentOperator = "";
         calculatorDisplay = (TextView)findViewById(R.id.calculatorDisplay);
         currentNumber = 0;
+
+        if (savedInstanceState !=null){
+            currentNumber = savedInstanceState.getFloat(CURRENT_NUMBER_KEY);
+            currentOperator = savedInstanceState.getString(CURRENT_OPERATOR_KEY);
+            calculatorDisplay.setText(savedInstanceState.getString(CALCULATOR_DISPLAY_KEY));
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ActionBar actionBar = getActionBar();
             if (actionBar!= null){
@@ -41,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(CURRENT_OPERATOR_KEY, currentOperator);
+        outState.putFloat(CURRENT_NUMBER_KEY, currentNumber);
+        outState.putString(CALCULATOR_DISPLAY_KEY,calculatorDisplay.getText().toString());
     }
 
     @Override
